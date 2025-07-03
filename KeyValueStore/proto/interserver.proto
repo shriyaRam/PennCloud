@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+service InterServer {
+
+    // Update a replica with new data
+    rpc callPrimary (UpdateArgs) returns (UpdateReply);
+    rpc sendToServer (UpdateArgs) returns (UpdateReply);
+    rpc askServer (UpdateArgs) returns (UpdateReply);
+    rpc rollBackServer (UpdateArgs) returns (UpdateReply); 
+    rpc sendCheckPoint (CheckPointArgs) returns (CheckPointReply);
+    rpc checkpointing (CheckPointArgs) returns (CheckPointReply);
+    rpc loadNewTablet (LoadTabletArgs) returns (LoadTabletReply);
+    rpc fetchCurrentTabletIndex(TabletIndexArgs) returns (TabletIndexReply);
+    rpc getMissingLogsFromPosition(LogPositionRequest) returns (LogPositionResponse);
+    rpc getCheckpointChunk(CheckpointChunkRequest) returns (CheckpointChunkResponse);
+    rpc getLogChunk(CheckpointChunkRequest) returns (CheckpointChunkResponse);
+    rpc checkPointAndEvictForRead(ReadEvictArgs) returns (ReadEvictReply);
+
+}
+
+message UpdateArgs {
+    string Row = 1;                  // Row to update
+    string Column = 2;               // Column to update
+    bytes Value1 = 3;               // New value for the cell
+    bytes Value2 = 4;               // Value2 for cput
+    string Operation = 5;            // The operation to perform
+    int32 serial = 6;   // order assigned by primary
+}
+
+// Reply to an update request
+message UpdateReply {
+    string status = 1;               // Indicates if update was successful
+    string message = 2;              // Optional status message
+}
+
+message CheckPointArgs{
+    int32 TabletNo = 1;               //TabletNo
+    //int32 CheckPointVersion = 2;      //checkpoint Version
+}
+
+message CheckPointReply{
+    int32 CheckPointVersion = 1;
+}
+
+message LoadTabletArgs{
+    int32 TabletNo = 1;
+}
+
+message LoadTabletReply{
+
+}
+
+message TabletIndexArgs{
+
+}
+
+message TabletIndexReply{
+    int32 TabletIndex = 1;
+}
+
+message LogLineRequest {
+  int64 last_line_number = 1; // Last line number in Node 1's log file
+  int32 tabletNo = 2;
+}
+
+message LogLineResponse {
+  bytes data = 1; // Concatenated log entries
+  bool is_done = 2; // Indicates if all data has been sent
+}
+
+message LogPositionRequest {
+  int64 tabletno = 1;         // Tablet number to identify the log file
+  int64 start_position = 2;   // Starting position in the file (byte offset)
+}
+
+// Response message for returning log chunks
+message LogPositionResponse {
+  bytes chunk_data = 1;      // The chunk of log data
+  int64 next_position = 2;    // The position to start the next read
+  bool is_done = 3;           // Flag to indicate if this is the last chunk
+}
+
+message CheckpointChunkRequest {
+  int64 chunk_number = 1; // The number of the requested chunk
+  int64 chunk_size = 2;   // The size of each chunk in bytes
+  int32 tabletNo = 3;
+}
+
+message CheckpointChunkResponse {
+  bytes chunk_data = 1;  // The chunk of checkpoint data
+  bool is_done = 2;       // Indicates if all data has been sent
+}
+
+message ReadEvictArgs{
+  int32 checkpointTabletNo = 1;
+  int32 loadTabletNo = 2;
+}
+
+message ReadEvictReply{
+
+}

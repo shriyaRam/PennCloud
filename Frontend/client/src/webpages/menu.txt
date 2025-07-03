@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PennCloud</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- CSS -->
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+        .header {
+            margin-top: 50px;
+        }
+        .blue.segment {
+            background-color: #001f5b !important; /* Blue color for header background */
+            border-radius: 0%;
+        }
+        .floated.header {
+            color: white;
+        }
+        .login-panel {
+            height: 270px;
+            width: 500px;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+        .separator-line {
+            border-top: 1px solid #d3d3d3; /* Light gray color */
+            margin: 20px 0;
+        }
+        .ui.fluid.button {
+            background-color: #0E6EB8;
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui clearing blue segment">
+        <h2 class="ui left floated header">
+            <i class="tiny cloud icon" style="font-size: 30px; margin-top: 10px; margin-bottom: 0px"></i>
+        </h2>
+        <h3 class="ui right floated header" style="font-size: 25px; margin-top: 10px; margin-bottom: 10px">PennCloud</h3>
+    </div>
+
+    <div class="centered-container">
+        <div class="ui segment login-panel" style="padding: 25px;">
+            <h2 class="ui center aligned header">Menu</h2>
+            <p class= "ui center aligned header" style="font-size: 16px; font-weight:100; margin-bottom: 8px;">Welcome to PennCloud! Please select an option below:</p>
+            <div class="separator-line"></div>
+            <div class="ui grid">
+                <div class="three column row">
+                    <div class="column">
+                        <a href="/inbox" class="ui fluid button">Email</a>
+                    </div>
+                    <div class="column">
+                        <a href="/storage?folder=root/" class="ui fluid button">Storage</a>
+                    </div>
+                    <div class="column">
+                        <a href="/admin" class="ui fluid button">Admin</a>
+                    </div>
+                </div>
+                <div class="two column row">
+                    <div class="column">
+                        <a href="/change_password" class="ui fluid button">Change Password</a>
+                    </div>
+                    <div class="column">
+                        <a href="/logout" class="ui fluid button">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>

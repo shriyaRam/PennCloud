@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PennCloud</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- CSS -->
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        .header {
+            margin-top: 50px;
+        }
+        .blue.segment {
+            background-color: #001f5b !important; /* Blue color for header background */
+            border-radius: 0%;
+        }
+        .floated.header {
+            color: white;
+        }
+        .login-panel {
+            width: 70%;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 25px;
+        }
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            padding: 50px 0; 
+            min-height: 100vh; 
+        }
+        .separator-line {
+            border-top: 1px solid #d3d3d3; /* Light gray color */
+            margin: 20px 0;
+        }
+        .button-group {
+            margin-bottom: 20px; /* Adds spacing below the buttons */
+        }
+        a.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui clearing blue segment">
+        <h2 class="ui left floated header">
+            <i class="tiny cloud icon" style="font-size: 30px; margin-top: 10px; margin-bottom: 0px"></i>
+        </h2>
+        <h3 class="ui right floated header" style="font-size: 25px; margin-top: 10px; margin-bottom: 10px">PennCloud</h3>
+    </div>
+
+    <div class="centered-container">
+        <div class="ui segment login-panel">
+            <h2 class="ui left aligned header">Admin Console</h2>
+            <div class="separator-line"></div>
+            
+            <div class="button-group" style="display: flex; align-items: center;">
+                <a href="/admin" class="ui tiny blue button">Refresh</a>
+                <a href="/menu" class="ui tiny teal button">Back to Menu</a>
+            </div>
+            
+            <table class="ui single line table">
+                <thead>
+                  <tr>
+                    <th>Server</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Frontend 1</td>
+                    <td>127.0.0.1:5015</td>
+                    <td><127.0.0.1:5015_status></td>
+                    <td>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Frontend 2</td>
+                    <td>127.0.0.1:5016</td>
+                    <td><127.0.0.1:5016_status></td>
+                    <td>
+                    </td>
+                  </tr>                  
+                  <tr>
+                    <td>Frontend 3</td>
+                    <td>127.0.0.1:5017</td>
+                    <td><127.0.0.1:5017_status></td>
+                    <td>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Frontend 4</td>
+                    <td>127.0.0.1:5018</td>
+                    <td><127.0.0.1:5018_status></td>
+                    <td>
+                    </td>
+                  </tr>
+                    <tr>
+                    <td>KVS Node 1</td>
+                    <td>127.0.0.1:50051</td>
+                    <td id="status-50051"><127.0.0.1:50051_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50051&status=stop" id="shutdown-50051" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50051&status=start" id="start-50051" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50051&page=1" id="rawdata-50051" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 2</td>
+                    <td>127.0.0.1:50052</td>
+                    <td id="status-50052"><127.0.0.1:50052_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50052&status=stop" id="shutdown-50052" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50052&status=start" id="start-50052" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50052&page=1" id="rawdata-50052" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 3</td>
+                    <td>127.0.0.1:50053</td>
+                    <td id="status-50053"><127.0.0.1:50053_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50053&status=stop" id="shutdown-50053" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50053&status=start" id="start-50053" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50053&page=1" id="rawdata-50053" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 4</td>
+                    <td>127.0.0.1:50054</td>
+                    <td id="status-50054"><127.0.0.1:50054_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50054&status=stop" id="shutdown-50054" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50054&status=start" id="start-50054" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50054&page=1" id="rawdata-50054" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 5</td>
+                    <td>127.0.0.1:50055</td>
+                    <td id="status-50055"><127.0.0.1:50055_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50055&status=stop" id="shutdown-50055" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50055&status=start" id="start-50055" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50055&page=1" id="rawdata-50055" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 6</td>
+                    <td>127.0.0.1:50056</td>
+                    <td id="status-50056"><127.0.0.1:50056_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50056&status=stop" id="shutdown-50056" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50056&status=start" id="start-50056" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50056&page=1" id="rawdata-50056" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 7</td>
+                    <td>127.0.0.1:50057</td>
+                    <td id="status-50057"><127.0.0.1:50057_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50057&status=stop" id="shutdown-50057" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50057&status=start" id="start-50057" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50057&page=1" id="rawdata-50057" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 8</td>
+                    <td>127.0.0.1:50058</td>
+                    <td id="status-50058"><127.0.0.1:50058_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50058&status=stop" id="shutdown-50058" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50058&status=start" id="start-50058" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50058&page=1" id="rawdata-50058" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td>KVS Node 9</td>
+                    <td>127.0.0.1:50059</td>
+                    <td id="status-50059"><127.0.0.1:50059_status></td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                        <a href="/change_status?node=127.0.0.1:50059&status=stop" id="shutdown-50059" class="ui tiny teal button">Shut Down</a>
+                        <a href="/change_status?node=127.0.0.1:50059&status=start" id="start-50059" class="ui tiny blue button">Start</a>
+                        <a href="/raw_data?node=127.0.0.1:50059&page=1" id="rawdata-50059" class="ui tiny blue button">Raw Data</a>
+                        </div>
+                    </td>
+                    </tr>
+
+                </tbody>
+              </table>
+        </div>
+    </div>
+
+    <!-- JS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        
+        function updateButtonsByStatus(nodeId) {
+            const statusElement = document.getElementById(`status-${nodeId}`);
+            const shutdownButton = document.getElementById(`shutdown-${nodeId}`);
+            const rawdataButton = document.getElementById(`rawdata-${nodeId}`);
+            const startButton = document.getElementById(`start-${nodeId}`);
+
+            // Get the status text
+            const status = statusElement.textContent.trim().toLowerCase();
+
+            // Enable or disable buttons based on status
+            if (status === "running") {
+            // Enable "Shut Down" and disable "Start"
+            shutdownButton.classList.remove("disabled");
+            shutdownButton.style.pointerEvents = "auto";
+            rawdataButton.classList.remove("disabled");
+            rawdataButton.style.pointerEvents = "auto";
+
+            startButton.classList.add("disabled");
+            startButton.style.pointerEvents = "none";
+            } else if (status === "down") {
+            // Enable "Start" and disable "Shut Down"
+            shutdownButton.classList.add("disabled");
+            shutdownButton.style.pointerEvents = "none";
+            rawdataButton.classList.add("disabled");
+            rawdataButton.style.pointerEvents = "none";
+
+            startButton.classList.remove("disabled");
+            startButton.style.pointerEvents = "auto";
+            }
+        }
+
+        // Loop through all nodes and update button states
+        const nodeIds = ["50051", "50052", "50053", "50054", "50055", "50056", "50057", "50058", "50059"];
+        nodeIds.forEach((nodeId) => {
+            updateButtonsByStatus(nodeId);
+        });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+service Coordinator {
+    // Called by Coordinator to get the status of a node
+    rpc getStatus(StatusArgs) returns (StatusReply);
+
+    // Called by KV Store node to request server mapping for data range
+    rpc requestServerMapping(ServerMappingArgs) returns (ServerMappingReply);
+
+    // Called by Coordinator to assign a primary server
+    rpc setPrimaryServer(SetPrimaryServerArgs) returns (SetPrimaryServerReply);
+
+    // Called by Coordinator to notify that a server is down
+    rpc serverDown(ServerDownArgs) returns (ServerDownReply);
+
+    // Called by Coordinator to notify that a server is up
+    rpc serverUp(ServerUpArgs) returns (ServerUpReply);
+
+    rpc fetchAllAddress(AllAddressArgs) returns (AllAddressReply);
+}
+
+message StatusArgs {}
+
+// Status reply message
+message StatusReply {
+
+}
+
+// Arguments for requesting server mapping
+message ServerMappingArgs {
+    string ipAddressPort = 1; // Format: "ip:port"
+}
+
+// Reply for server mapping request
+message ServerMappingReply {
+    string startChar = 1;      // Start of the character range 
+    string endChar = 2;        // End of the character range 
+    string primaryServer = 3;  // Address of the primary server (format: "ip:port")
+}
+
+// Message for primary server assignment
+message SetPrimaryServerArgs {
+    string primaryServer = 1;  // Address of the server to be assigned as primary (format: "ip:port")
+}
+
+// Empty reply for primary server assignment
+message SetPrimaryServerReply {
+    
+}
+
+// Arguments for server down notification
+message ServerDownArgs {
+    string ipAddressPort = 1;  // Address of the server that is down (format: "ip:port")
+}
+
+// Empty reply for server down notification
+message ServerDownReply {}
+
+// Arguments for server up notification
+message ServerUpArgs {
+    string ipAddressPort = 1;  // Address of the server that is up (format: "ip:port")
+}
+
+// Empty reply for server up notification
+message ServerUpReply {}
+
+message AllAddressArgs{
+    string ipAddressPort = 1;
+
+}
+
+message AllAddressReply{
+    repeated string addresses = 1;
+}

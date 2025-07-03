@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package loadbalancer;
+
+service LoadBalancerService {
+    // 1. Collect heartbeats from other servers
+    rpc CollectHeartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+
+    // 2. Retrieve a status string stored in the load balancer
+    rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
+}
+
+message HeartbeatRequest {
+    string server_id = 1;  // Identifier of the server sending the heartbeat
+    string status = 2;     // Status message, e.g., "alive"
+    int64 timestamp = 3;   // Timestamp of the heartbeat
+}
+
+message HeartbeatResponse {
+    string message = 1;    // Acknowledgment message
+}
+
+message GetStatusRequest {
+    string key = 1;        // Key to retrieve the stored status
+}
+
+message GetStatusResponse {
+    string value = 1;      // Value of the stored status
+}

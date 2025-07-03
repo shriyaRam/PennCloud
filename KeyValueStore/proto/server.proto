@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+service Server {
+    rpc Put (PutArgs) returns (PutReply) {}
+    rpc Get (GetArgs) returns (GetReply) {}
+    rpc CPut(CPutArgs) returns (CPutReply) {}
+    rpc Del(DelArgs) returns (DelReply) {}
+    rpc Kill(KillArgs) returns (KillReply){}
+    rpc FetchKeys(KeyArgs) returns (KeyReply){}
+    rpc Revive(ReviveArgs) returns (ReviveReply){}
+}
+
+message PutArgs {
+    string Row = 1;
+    string Column = 2;
+    bytes Value = 3;
+}
+
+message PutReply {}
+
+message GetArgs {
+    string Row = 1;
+    string Column = 2;
+}
+
+message GetReply {
+    bytes Value = 1;
+}
+
+message CPutArgs{
+    string Row = 1;
+    string Column = 2;
+    bytes Value1 = 3;
+    bytes Value2 = 4;
+}
+
+message CPutReply {}
+
+message DelArgs{
+    string Row = 1;
+    string Column = 2;
+}
+
+message DelReply{}
+
+message KillArgs{}
+
+message KillReply{}
+
+message KeyArgs{}
+
+message ReviveArgs{}
+
+message ReviveReply{}
+
+message CustomValue{
+    repeated bytes values = 1;
+}
+
+message KeyReply{
+    map<string, CustomValue> my_map = 1;
+}

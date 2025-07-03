@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package smtpClient;
+
+service SMTPService {
+  rpc SendEmail(SendEmailRequest) returns (SendEmailResponse);
+}
+
+message SendEmailRequest {
+  string sender = 1;
+  string recipient = 2;
+  string email_object = 3;
+}
+
+message SendEmailResponse {
+  bool success = 1;
+  string message = 2;
+}

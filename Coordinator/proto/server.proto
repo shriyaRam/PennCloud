@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+service Server {
+    rpc Put (PutArgs) returns (PutReply) {}
+    rpc Get (GetArgs) returns (GetReply) {}
+    rpc CPut(CPutArgs) returns (CPutReply) {}
+    rpc Del(DelArgs) returns (DelReply) {}
+}
+
+message PutArgs {
+    string Row = 1;
+    string Column = 2;
+    string Value = 3;
+}
+
+message PutReply {}
+
+message GetArgs {
+    string Row = 1;
+    string Column = 2;
+}
+
+message GetReply {
+    string Value = 1;
+}
+
+message CPutArgs{
+    string Row = 1;
+    string Column = 2;
+    string Value1 = 3;
+    string Value2 = 4;
+}
+
+message CPutReply {}
+
+message DelArgs{
+    string Row = 1;
+    string Column = 2;
+}
+
+message DelReply{}

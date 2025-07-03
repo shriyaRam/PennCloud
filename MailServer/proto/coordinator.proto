@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service Coordinator {
+  rpc getKVSAddress(GetKVSAddressArgs) returns (GetKVSAddressReply);
+}
+
+message GetKVSAddressArgs{
+  string username = 1;
+}
+
+message GetKVSAddressReply{
+  string ipAddressPort = 1;
+}

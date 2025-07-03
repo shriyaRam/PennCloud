@@ -1,0 +1,173 @@
+#include "HttpRequest.h"
+
+using namespace std;
+
+// Constructor to parse the request headers
+HttpRequest::HttpRequest(std::string header_str) {
+
+    raw_data = header_str;
+
+    // read the method (GET/POST...etc.)
+    size_t method_end = header_str.find(' ');
+    method = header_str.substr(0, method_end);
+    
+    // read the path and query string
+    size_t path_end = header_str.find(' ', method_end + 1);
+    parse_uri(header_str.substr(method_end + 1, path_end - method_end - 1));
+    
+    // Parse the header string and populate the header_map
+    size_t start = 0;
+    size_t line_end = header_str.find("\r\n");
+    while (line_end != std::string::npos) {
+        std::string line = header_str.substr(start, line_end - start);
+        size_t colon_pos = line.find(":");
+        if (colon_pos != std::string::npos) {
+            std::string key = line.substr(0, colon_pos);
+            std::string value = line.substr(colon_pos + 1);
+            header_map[key] = value;
+        }
+        start = line_end + 2;
+        line_end = header_str.find("\r\n", start);
+    }
+}
+
+string HttpRequest::get_session_id(){
+    auto it = header_map.find("Cookie");
+    if (it != header_map.end()) {
+        const std::string& cookies = it->second;
+        size_t session_start = cookies.find("session_id=");
+        if (session_start != std::string::npos) {
+            session_start += std::string("session_id=").length();
+            size_t session_end = cookies.find(";", session_start);
+            return cookies.substr(session_start, session_end - session_start);
+        }
+    }
+    return ""; // Return empty string if session_id is not found
+}
+
+void HttpRequest::parse_multipart_body(std::string& body) {
+
+    // find the boundary
+    const std::string& content_type = header_map["Content-Type"];
+    size_t boundary_pos = content_type.find("boundary=");
+    std::string boundary_str = content_type.substr(boundary_pos + 9);
+    std::string boundary = "--" + boundary_str;
+
+    size_t start = body.find(boundary);
+    start += boundary.length() + 2; // Skip the boundary and \r\n
+    size_t end = body.find(boundary, start);
+
+    std::string part = body.substr(start, end - start - 2); // skip the last line include "--"
+
+    size_t header_end = part.find("\r\n\r\n");
+
+    std::string headers = part.substr(0, header_end);
+    std::string content = part.substr(header_end + 4);
+
+    // extract filename from the headers
+    size_t filename_pos = headers.find("filename=\"");
+    if (filename_pos != std::string::npos) {
+        size_t filename_start = filename_pos + 10;
+        size_t filename_end = headers.find("\"", filename_start);
+        if (filename_end != std::string::npos) {
+            file.name = headers.substr(filename_start, filename_end - filename_start);
+        }
+    }
+    file.data = content;
+}
+
+
+bool HttpRequest::to_validate_session(){
+    return uri != "/login" && uri != "/register" && uri != "/";
+}
+
+// Parse the path and query string
+void HttpRequest::parse_uri(string uri_str) {
+    size_t query_start = uri_str.find("?");
+    if (query_start != std::string::npos) {
+        uri = uri_str.substr(0, query_start);
+        std::string query = uri_str.substr(query_start + 1);
+        size_t start = 0;
+        size_t query_end = query.find("&");
+        while (query_end != std::string::npos) {
+            std::string param = query.substr(start, query_end - start);
+            size_t equal_pos = param.find("=");
+            if (equal_pos != std::string::npos) {
+                std::string key = param.substr(0, equal_pos);
+                std::string value = param.substr(equal_pos + 1);
+                query_map[key] = value;
+            }
+            start = query_end + 1;
+            query_end = query.find("&", start);
+        }
+
+        // Parse the last parameter
+        std::string param = query.substr(start);
+        size_t equal_pos = param.find("=");
+        if (equal_pos != std::string::npos) {
+            std::string key = param.substr(0, equal_pos);
+            std::string value = param.substr(equal_pos + 1);
+            query_map[key] = value;
+        }
+    } else {
+        uri = uri_str;
+    }
+}
+
+void HttpRequest::print_request() const {
+    cout << raw_data << body << endl;
+}
+
+// Get the content length from the request headers
+int HttpRequest::get_content_length() const {
+    if (header_map.find("Content-Length") != header_map.end()) {
+        return std::stoi(header_map.at("Content-Length"));
+    }
+    return 0;
+}
+
+// Check if connection: closed
+bool HttpRequest::connection_closed(){
+    if (header_map.find("Connection") != header_map.end() && header_map["Connection"] == "close" ) {
+        return true;
+    }
+    return false;
+}
+
+// Set the request body
+void HttpRequest::set_body(std::string body_str) {
+    body = body_str;
+    // Check for multipart/form-data
+
+    if (header_map["Content-Type"].find("multipart/form-data") != std::string::npos) {
+        parse_multipart_body(body);
+    } else if (method == "POST") {
+        parse_body();
+    }
+}
+
+// Parse the body parameters
+void HttpRequest::parse_body() {
+    size_t start = 0;
+    size_t param_end = body.find("&");
+    while (param_end != std::string::npos) {
+        std::string param = body.substr(start, param_end - start);
+        size_t equal_pos = param.find("=");
+        if (equal_pos != std::string::npos) {
+            std::string key = param.substr(0, equal_pos);
+            std::string value = param.substr(equal_pos + 1);
+            body_map[key] = value;
+        }
+        start = param_end + 1;
+        param_end = body.find("&", start);
+    }
+
+    // Parse the last parameter
+    std::string param = body.substr(start);
+    size_t equal_pos = param.find("=");
+    if (equal_pos != std::string::npos) {
+        std::string key = param.substr(0, equal_pos);
+        std::string value = param.substr(equal_pos + 1);
+        body_map[key] = value;
+    }
+}

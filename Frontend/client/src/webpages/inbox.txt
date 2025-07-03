@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PennCloud - Inbox</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+
+        .blue.segment {
+            background-color: #001f5b !important;
+            border-radius: 0%;
+        }
+
+        .floated.header {
+            color: white;
+        }
+
+        .inbox-panel {
+            width: 80%;
+            margin: 30px auto;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 25px;
+        }
+
+        .ui.table thead th {
+            background-color: #0E6EB8 !important;
+            color: white !important;
+        }
+
+        .ui.fluid.button {
+            background-color: #0E6EB8;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ui clearing blue segment">
+        <h2 class="ui left floated header">
+            <i class="tiny cloud icon" style="font-size: 30px; margin-top: 10px; margin-bottom: 0px"></i>
+        </h2>
+        <h3 class="ui right floated header" style="font-size: 25px; margin-top: 10px; margin-bottom: 10px">PennCloud -
+            Inbox</h3>
+    </div>
+
+    <div class="ui segment inbox-panel">
+        <h2 class="ui header">Email Inbox</h2>
+        <div class="ui divider"></div>
+
+        <!-- Tab Menu -->
+        <div class="ui top attached tabular menu">
+            <a class="item active" data-tab="received">Received Emails</a>
+            <a class="item" data-tab="sent">Sent Emails</a>
+        </div>
+
+        <!-- Received Emails Tab -->
+        <div class="ui bottom attached tab segment active" data-tab="received">
+            <button class="ui fluid blue button" style="margin-bottom: 15px;" onclick="$('#composeModal').modal('show')">
+                Compose New Email
+            </button>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   <rcvd_email_table>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sent Emails Tab -->
+        <div class="ui bottom attached tab segment" data-tab="sent">
+            <button class="ui fluid blue button" style="margin-bottom: 15px;" onclick="$('#composeModal').modal('show')">
+                Compose New Email
+            </button>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>To</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="sentEmailsTable">
+                    <sent_email_table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Compose Email Modal -->
+    <div id="composeModal" class="ui modal">
+        <div class="header">Compose New Email</div>
+        <div class="content">
+            <form class="ui form" action="/send-email" method="POST">
+                <div class="field">
+                    <label>From</label>
+                    <input type="email" name="from" id="fromEmail" placeholder= "<username>@penncloud" readonly required>
+                </div>
+                <div class="field">
+                    <label>To</label>
+                    <input type="email" name="to" id="toEmail" placeholder="Recipient's email" required>
+                </div>
+                <div class="field">
+                    <label>Subject</label>
+                    <input type="text" name="subject" id="subject" placeholder="Email subject" required>
+                </div>
+                <div class="field">
+                    <label>Body</label>
+                    <textarea name="body" id="emailBody" placeholder="Write your email here" required></textarea>
+                </div>
+                <button class="ui blue button" type="submit">Send</button>
+            </form>
+        </div>
+        <div class="actions">
+            <button class="ui button" onclick="$('#composeModal').modal('hide')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Forward Email Modal -->
+    <!--div id="forwardModal" class="ui modal">
+        <div class="header">Forward Email</div>
+        <div class="content">
+            <form class="ui form" action="/forward-email" method="POST">
+                <div class="field">
+                    <label>From</label>
+                    <input type="email" name="from" value="<username>@penncloud" readonly required>
+                </div>
+                <div class="field">
+                    <label>To</label>
+                    <input type="email" name="to" placeholder="Recipient's email" required>
+                </div>
+                <div class="field">
+                    <label>Subject</label>
+                    <input type="text" name="subject" value="Fwd: <subject>" required>
+                </div>
+                <div class="field">
+                    <label>Body</label>
+                    <textarea name="body" required><body></textarea>
+                </div>
+                <button class="ui blue button" type="submit">Forward</button>
+            </form>
+        </div>
+        <div class="actions">
+            <button class="ui button" onclick="$('#forwardModal').modal('hide')">Cancel</button>
+        </div>
+    </div>
+    -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        // Tab Functionality
+        $('.menu .item').tab();
+
+        // View email functionality
+        function view_email(email_id) {
+            // Redirect to the email view page with the email ID
+            window.location.href = '/view_email?email_id=' + email_id;
+        }
+
+        // Delete email functionality
+        function delete_email(email_id, tab) {
+            const encodedTab = encodeURIComponent(tab);
+            console.log(encodedTab);
+
+            // Redirect to the delete email endpoint with the encoded parameters
+            window.location.href = `/delete_email?email_id=${email_id}&tab=${encodedTab}`;
+            console.log(`Deleting email with ID: ${email_id}, Tab: ${tab}`);
+        }
+
+        function forward_email(email_id) {
+            // Redirect to the forward email endpoint with the encoded parameters
+            console.log(`Calling forward email for ID: ${email_id}`);
+            window.location.href = '/forward-email?email_id=' + email_id; // Use the correct route
+            console.log(`Forwarding email with ID: ${email_id}`);
+        }
+        function reply_to_email(email_id) {
+            console.log(`Calling reply email for ID: ${email_id}`);
+            window.location.href = `/reply-to-email?email_id=${email_id}`; // Correct syntax
+            console.log(`Replying to email with ID: ${email_id}`);
+        }
+    </script>
+</body>
+</html>

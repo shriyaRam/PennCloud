@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PennCloud</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- CSS -->
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            margin-top: 50px;
+        }
+
+        .blue.segment {
+            background-color: #001f5b !important;
+            border-radius: 0%;
+        }
+
+        .floated.header {
+            color: white;
+        }
+
+        .centered-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 0;
+            min-height: 100vh;
+        }
+
+        .separator-line {
+            border-top: 1px solid #d3d3d3;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .button-group {
+            margin-bottom: 20px;
+        }
+
+        .email-details {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .email-detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .email-detail-label {
+            font-weight: bold;
+            width: 100px;
+            margin-right: 15px;
+            color: #666;
+        }
+
+        .email-detail-value {
+            flex-grow: 1;
+        }
+
+        .email-content {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 20px;
+            line-height: 1.6;
+            min-height: 300px;
+        }
+
+        .email-content pre {
+            font-family: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui clearing blue segment">
+        <h2 class="ui left floated header">
+            <i class="tiny cloud icon" style="font-size: 30px; margin-top: 10px; margin-bottom: 0px"></i>
+        </h2>
+        <h3 class="ui right floated header" style="font-size: 25px; margin-top: 10px; margin-bottom: 10px">PennCloud</h3>
+    </div>
+
+    <div class="centered-container">
+        <div class="button-group" style="display: flex; align-items: center;">
+            <a href="/inbox" class="ui tiny teal button" style="margin-left: 10px;">Back to Inbox</a>
+        </div>
+
+        <div class="email-details">
+            <div class="email-detail-row">
+                <div class="email-detail-label">From:</div>
+                <div class="email-detail-value"><sender></div>
+            </div>
+            <div class="email-detail-row">
+                <div class="email-detail-label">To:</div>
+                <div class="email-detail-value"><recipient></div>
+            </div>
+            <div class="email-detail-row">
+                <div class="email-detail-label">Time:</div>
+                <div class="email-detail-value"><timestamp></div>
+            </div>
+            <div class="email-detail-row">
+                <div class="email-detail-label">Subject:</div>
+                <div class="email-detail-value"><subject></div>
+            </div>
+        </div>
+
+        <div class="email-content">
+            <pre><email_content>></pre>
+        </div>
+    </div>
+
+    <!-- JS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>

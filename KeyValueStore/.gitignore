@@ -1,0 +1,4 @@
+.vscode/*
+build/*
+server/src/checkpoints/*
+server/src/replicationlogs/*

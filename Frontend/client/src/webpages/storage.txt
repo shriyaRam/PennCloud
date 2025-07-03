@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PennCloud</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!-- CSS -->
+    <style>
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        .header {
+            margin-top: 50px;
+        }
+        .blue.segment {
+            background-color: #001f5b !important; /* Blue color for header background */
+            border-radius: 0%;
+        }
+        .floated.header {
+            color: white;
+        }
+        .login-panel {
+            width: 90%;
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 25px;
+        }
+        .centered-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            padding: 50px 0; 
+            min-height: 100vh; 
+        }
+        .separator-line {
+            border-top: 1px solid #d3d3d3; /* Light gray color */
+            margin: 20px 0;
+        }
+        .button-group {
+            margin-bottom: 20px; /* Adds spacing below the buttons */
+        }
+        #create-folder-button {
+            margin-right: 12px; /* Adjust the right margin */
+        }
+        #root-button {
+            margin-right: 12px; /* Adjust the right margin */
+        }
+
+        /* Add spacing between top-level and nested items */
+        .ui.list .item {
+            margin-bottom: 10px;
+        }
+
+        /* Proper indentation for nested lists */
+        .ui.list .list {
+            margin-left: 20px;
+        }
+
+        /* Align folder icons with text */
+        .ui.list .item .header {
+            display: inline-block;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        /* Add hover effect for better UX */
+        .folder-select:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+                
+    </style>
+</head>
+<body>
+
+    <div class="ui clearing blue segment">
+        <h2 class="ui left floated header">
+            <i class="tiny cloud icon" style="font-size: 30px; margin-top: 10px; margin-bottom: 0px"></i>
+        </h2>
+        <h3 class="ui right floated header" style="font-size: 25px; margin-top: 10px; margin-bottom: 10px">PennCloud</h3>
+    </div>
+
+    <div class="centered-container">
+        <div class="ui segment login-panel">
+            <h2 class="ui left aligned header">Your Files</h2>
+            <div class="separator-line"></div>
+            
+    <div class="button-group" style="display: flex; align-items: center;">
+        <!-- Upload a File -->
+        <form id="file-upload-form" action="/upload_file?folder=<folder>" method="POST" enctype="multipart/form-data" style="margin-right: 10px;">
+            <label for="file-upload" class="ui small blue button">
+                Upload a File
+            </label>
+            <input id="file-upload" type="file" name="file" style="display: none;" onchange="uploadFile()">
+        </form>
+
+        <!-- Create Folder Button -->
+        <button id="create-folder-button" class="ui small blue button" style="margin-right: 15px;" onclick="showCreateFolderModal()">Create Folder</button>
+
+        <!-- Back to Root -->
+        <a id="root-button" href="/storage?folder=root/" class="ui small blue button">Back to Root Directory</a>
+
+        <!-- Back to Menu -->
+        <a href="/menu" class="ui small teal button">Back to Menu</a>
+    </div>
+
+    <!-- Create Folder Modal -->
+    <div id="create-folder-modal" class="ui modal">
+        <div class="header">Create Folder</div>
+        <div class="content">
+            <form id="create-folder-form" action="/create_folder?folder=<folder>" method="POST">
+                <div class="ui input" style="width: 100%; margin-bottom: 10px;">
+                    <input type="text" name="folder_name" placeholder="Folder Name" required>
+                </div>
+                <button type="submit" class="ui small purple button">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rename Modal -->
+    <div id="rename-modal" class="ui modal">
+        <div class="header">Rename File</div>
+        <div class="content">
+            <form id="rename-form" action="/rename" method="POST">
+                <input type="hidden" name="old_filename" id="rename-old-filename">
+                <div class="ui input" style="width: 100%; margin-bottom: 10px;">
+                    <input type="text" name="new_filename" id="rename-new-filename" placeholder="New Filename" required>
+                </div>
+                <button type="submit" class="ui small purple button">Rename</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Move Modal -->
+    <div id="move-modal" class="ui modal">
+    <div class="header">Move to Another Folder</div>
+    <div class="content">
+        <form id="move-form" action="/move" method="POST">
+        <!-- Hidden input to store the item being moved -->
+        <input type="hidden" name="item_id" id="move-item-id">
+
+        <!-- Simplified Folder Tree -->
+        <div class="ui list">
+            <folder_tree>
+        </div>
+
+        <!-- Hidden input to store the selected destination -->
+        <input type="hidden" name="destination_folder" id="destination-folder">
+
+        <!-- Submit Button -->
+        <button type="submit" class="ui small purple button" style="margin-top: 20px;">Move</button>
+        </form>
+    </div>
+    </div>
+
+            
+            <table class="ui single line table">
+                <thead>
+                  <tr>
+                    <th>Filename</th>
+                    <th>Size</th>
+                    <th>Uploaded Time</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <file_table>
+                </tbody>
+              </table>
+        </div>
+    </div>
+
+    <!-- JS Script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        // File upload functionality
+        function uploadFile() {
+            const form = document.getElementById('file-upload-form');
+            form.submit(); // Automatically submit the form when a file is selected
+        }
+
+        function download_file(filename) {
+            window.location.href = '/download?file=' + filename;
+        }
+
+        function delete_file(filename) {
+            window.location.href = '/delete_file?file=' + filename;
+        }
+
+        function delete_folder(folder) {
+            window.location.href = '/delete_folder?folder=' + folder;
+        }
+
+        // Attach the function to the global window object
+        window.showCreateFolderModal = function() {
+            $('#create-folder-modal').modal('show');
+        };
+
+        // Initialize Semantic UI components after the page is loaded
+        $(document).ready(function () {
+            // Initialize the modal
+            $('#create-folder-modal').modal();
+        });
+
+        function showRenameModal(oldFilename, displayName) {
+            // Decode the old filename to handle URL-encoded characters
+            const decodedOldFilename = decodeURIComponent(oldFilename);
+
+            document.getElementById('rename-old-filename').value = decodedOldFilename;
+            const newFilenameInput = document.getElementById('rename-new-filename');
+            newFilenameInput.value = displayName;
+            newFilenameInput.placeholder = "Enter new filename";
+
+            // Show the modal
+            $('#rename-modal').modal('show');
+        }
+
+        // Initialize Semantic UI components after the page is loaded
+        $(document).ready(function () {
+            $('#rename-modal').modal();
+        });
+
+        // Function to show the Move Modal
+        function showMoveModal(itemId) {
+        // Set the item ID in the hidden input
+        document.getElementById('move-item-id').value = itemId;
+
+        // Clear previous selection
+        document.getElementById('destination-folder').value = '';
+        const allHeaders = document.querySelectorAll('.folder-select');
+        allHeaders.forEach(header => header.style.fontWeight = 'normal'); // Reset styles
+
+        // Show the modal
+        $('#move-modal').modal('show');
+        }
+
+        // Function to handle folder selection
+        function selectFolder(folderId) {
+        // Set the folder ID in the hidden input
+        document.getElementById('destination-folder').value = folderId;
+
+        // Highlight the selected folder
+        const allHeaders = document.querySelectorAll('.folder-select');
+        allHeaders.forEach(header => header.style.fontWeight = 'normal'); // Reset styles
+        const selectedHeader = document.querySelector(`.folder-select[data-value="${folderId}"]`);
+        selectedHeader.style.fontWeight = 'bold'; // Highlight selected folder
+        }
+
+        // Add click event listeners to all folder headers
+        document.addEventListener('DOMContentLoaded', () => {
+        const folderHeaders = document.querySelectorAll('.folder-select');
+        folderHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+            const folderId = header.getAttribute('data-value');
+            selectFolder(folderId);
+            });
+        });
+        });
+    </script>
+</body>
+</html>

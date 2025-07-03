@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package smtpService;
+
+service SMTPServerService {
+  rpc ComposeEmail(ComposeEmailRequest) returns (ComposeEmailResponse);
+}
+
+message ComposeEmailRequest {
+  string sender = 1;
+  string recipient = 2;
+  bytes email_content = 3;
+  int32 num_chunks = 4;
+}
+
+
+message ComposeEmailResponse {
+}
+
+message ForwardEmailRequest {
+  string sender = 1;
+  string recipient = 2;
+  bytes email_content = 3;
+  int32 num_chunks = 4;
+}
+
+
+message ForwardEmailResponse {
+}
