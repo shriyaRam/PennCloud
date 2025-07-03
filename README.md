@@ -6,7 +6,7 @@ To run the PennCloud project, you need to enter each folder, build the files, an
 
 ## Prerequisites
 
-You need to first install gRPC and CMake. Check the demo repository shared by the TA panels for detailed instructions.
+You need to first install gRPC and CMake.
 
 https://github.com/LangQin0422/gRPC-Demo-CMake
 
