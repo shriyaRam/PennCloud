@@ -1,34 +1,5 @@
 # PennCloud Project
 
-**Full name:**  
-Kuan Ting Lin, Mahika Vajpeyi, Mikhael Zacharias Thomas, Shriya Ramakrishnan  
-
-**SEAS login:**  
-austinkt, mvajpeyi, mikth, shriyar  
-
-**Which features did you implement?**  
-- Entire assignment  
-
-**Did you complete any extra-credit tasks? If so, which ones?**  
-- Sent tab in the mailbox  
-
-**Did you personally write _all_ the code you are submitting  
-(other than code from the course web page)?**  
-- [x] Yes  
-- [ ] No  
-
-**Did you copy any code from the Internet, or from classmates?**  
-- [ ] Yes  
-- [x] No  
-
-**Did you collaborate with anyone on this assignment?**  
-- [ ] Yes  
-- [x] No  
-
-**Did you use any AI tool such as ChatGPT for this assignment?**  
-- [ ] Yes  
-- [x] No  
-
 # How to run the project
 
 To run the PennCloud project, you need to enter each folder, build the files, and run each component in a terminal.
